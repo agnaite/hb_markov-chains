@@ -30,9 +30,19 @@ def make_chains(text_string):
         {('hi', 'there'): ['mary', 'juanita'], ('there', 'mary'): ['hi'], ('mary', 'hi': ['there']}
     """
 
+
     chains = {}
 
     # your code goes here
+    for index in range(0, len(text_string) - 2):
+        first_word = text_string[index]
+        second_word = text_string[index + 1] 
+        third_word = text_string[index + 2]
+        
+        if (first_word, second_word) in chains.keys():
+            chains[(first_word, second_word)].append(third_word)
+        else:
+            chains[(first_word, second_word)] = [third_word]
 
     return chains
 
@@ -51,9 +61,11 @@ input_path = "green-eggs.txt"
 
 # Open the file and turn it into one long string
 input_text = open_and_read_file(input_path)
-print input_text
+# print input_text
 # Get a Markov chain
 chains = make_chains(input_text)
+for keys, values in chains.items():
+    print keys, values
 
 # Produce random text
 random_text = make_text(chains)
