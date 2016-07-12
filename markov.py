@@ -34,11 +34,16 @@ def make_chains(text_string):
     chains = {}
 
     # your code goes here
-    for index in range(0, len(text_string) - 2):
+    #loops through the text string until it reaches the second to last word
+    for index in range(0, len(text_string) - 2): 
+        #defines variables for words based on their position relative to the indexed word
         first_word = text_string[index]
         second_word = text_string[index + 1] 
         third_word = text_string[index + 2]
-        
+
+        #if a key with a tuple of the first and second words is already in the dict,
+        #appends the third word to the list already in place as the value.
+        #else, creates the key with the third word in a list.
         if (first_word, second_word) in chains.keys():
             chains[(first_word, second_word)].append(third_word)
         else:
@@ -52,7 +57,14 @@ def make_text(chains):
 
     text = ""
 
-    # your code goes here
+    current_key = choice(chains.keys())
+
+    while current_key in chains.keys():
+        current_value = choice(chains[current_key])
+        text += current_value + " "
+        current_key = (current_key[1], current_value)
+
+        # your code goes here
 
     return text
 
@@ -64,8 +76,8 @@ input_text = open_and_read_file(input_path)
 # print input_text
 # Get a Markov chain
 chains = make_chains(input_text)
-for keys, values in chains.items():
-    print keys, values
+# for keys, values in chains.items():
+#     print keys, values
 
 # Produce random text
 random_text = make_text(chains)
