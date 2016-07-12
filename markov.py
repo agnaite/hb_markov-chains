@@ -9,9 +9,13 @@ def open_and_read_file(file_path):
     """
 
     # your code goes here
+    contents = open(file_path)
+    contents_read = contents.read()
+    text = contents_read.split()
+    contents.close()
 
-    return "This should be a variable that contains your file text as one long string"
 
+    return text
 
 def make_chains(text_string):
     """Takes input text as string; returns _dictionary_ of markov chains.
@@ -47,7 +51,7 @@ input_path = "green-eggs.txt"
 
 # Open the file and turn it into one long string
 input_text = open_and_read_file(input_path)
-
+print input_text
 # Get a Markov chain
 chains = make_chains(input_text)
 
