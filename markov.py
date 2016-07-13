@@ -70,10 +70,14 @@ def make_text(chains):
     """Takes dictionary of markov chains; returns random text."""
 
     #sets a variable text equal to an empty string
-    text = ""
-
+    
     #sets variable current_key equal to a random choice in the keys in dict chains
     current_key = choice(chains.keys())
+    # print "{} is key before istitle.".format(current_key)
+    while not current_key[0].istitle():
+        current_key = choice(chains.keys())
+    #     print "{} is key after istitle.".format(current_key)
+    text = "{} {} ".format(current_key[0], current_key[1])
 
     #while the current_key is in the chains dict, loops through the below:
     while current_key in chains:
