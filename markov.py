@@ -26,6 +26,7 @@ def open_and_read_file(file_path):
 
     return text
 
+
 def make_chains(text_string, num_words):
     """Takes input text as string; returns _dictionary_ of markov chains.
 
@@ -38,18 +39,17 @@ def make_chains(text_string, num_words):
         >>> make_chains("hi there mary hi there juanita")
         {('hi', 'there'): ['mary', 'juanita'], ('there', 'mary'): ['hi'], ('mary', 'hi': ['there']}
     """
- 
     chains = {}
 
     #loops through the text string until it reaches the "num" to last word
-    for index in range(0, len(text_string) - num_words): 
+    for index in range(0, len(text_string) - num_words):
         #defines a variable for the first word. makes a list of next words and puts first_word in it
         first_word = text_string[index]
         next_words = [first_word]
-        
+
         #goes through the text string from right after your first word, above, to the number of words you need.
         #for each loop til you get to the number of words needed, appends the next word to your next_words list
-        for i in range (1, num_words):
+        for i in range(1, num_words):
             next_words.append(text_string[index + i])
         # converts the next_words list into a tuple and gets the word that follows the tuple
         next_words_tuple = tuple(next_words)
@@ -74,22 +74,17 @@ def make_text(chains):
 
     #sets variable current_key equal to a random choice in the keys in dict chains
     current_key = choice(chains.keys())
-    
+
     #while the current_key is in the chains dict, loops through the below:
     while current_key in chains:
         current_value = choice(chains[current_key])
-        #concatenates the current value to text
         text += current_value + " "
-        #sets the new current key equal old key from index one onwards plus the current value       
         current_key = current_key[1:] + (current_value,)
 
     return text
 
 
 input_path = " ".join(sys.argv[1:])
-
-#input_path = "green-eggs.txt"
-
 # Open the file and turn it into one long string
 input_text = open_and_read_file(input_path)
 # print input_text
