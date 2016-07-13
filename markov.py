@@ -1,4 +1,5 @@
 from random import choice
+import sys
 
 
 def open_and_read_file(file_path):
@@ -15,7 +16,7 @@ def open_and_read_file(file_path):
 
     return text
 
-def make_chains(text_string):
+def make_chains(text_string, num_words):
     """Takes input text as string; returns _dictionary_ of markov chains.
 
     A chain will be a key that consists of a tuple of (word1, word2)
@@ -27,23 +28,30 @@ def make_chains(text_string):
         >>> make_chains("hi there mary hi there juanita")
         {('hi', 'there'): ['mary', 'juanita'], ('there', 'mary'): ['hi'], ('mary', 'hi': ['there']}
     """
-
+ 
     chains = {}
 
-    #loops through the text string until it reaches the second to last word
-    for index in range(0, len(text_string) - 2): 
-        #defines variables for words based on their position relative to the indexed word
+    #loops through the text string until it reaches the "num" to last word
+    for index in range(0, len(text_string) - num_words): 
+        #defines a variable for the first word. makes a list of next words and puts first_word in it
         first_word = text_string[index]
-        second_word = text_string[index + 1] 
-        third_word = text_string[index + 2]
+        next_words = [first_word]
+        
+        #goes through the text string from right after your first word, above, to the number of words you need.
+        #for each loop til you get to the number of words needed, appends the next word to your next_words list
+        for i in range (1, num_words):
+            next_words.append(text_string[index + i])
+        # converts the next_words list into a tuple and gets the word that follows the tuple
+        next_words_tuple = tuple(next_words)
+        following_word = text_string[num_words + index]
 
-        #if a key with a tuple of the first and second words is already in the dict,
-        #appends the third word to the list already in place as the value.
-        #else, creates the key with the third word in a list.
-        if (first_word, second_word) in chains:
-            chains[(first_word, second_word)].append(third_word)
+        #if a key with a next_word_tuple is already in the dict,
+        #appends the following word to the list already in place as the value.
+        #else, creates the key with the following word in a list.
+        if next_words_tuple in chains:
+            chains[next_words_tuple].append(following_word)
         else:
-            chains[(first_word, second_word)] = [third_word]
+            chains[next_words_tuple] = [following_word]
 
     return chains
 
@@ -51,28 +59,30 @@ def make_chains(text_string):
 def make_text(chains):
     """Takes dictionary of markov chains; returns random text."""
 
+    #sets a variable text equal to an empty string
     text = ""
 
+    #sets variable current_key equal to a random choice in the keys in dict chains
     current_key = choice(chains.keys())
-
+    
+    #while the current_key is in the chains dict, loops through the below:
     while current_key in chains:
         current_value = choice(chains[current_key])
+        #concatenates the current value to text
         text += current_value + " "
-        current_key = (current_key[1], current_value)
+        #sets the new current key equal old key from index one onwards plus the current value       
+        current_key = current_key[1:] + (current_value,)
 
     return text
 
 
-input_path = "gettysburg.txt"
+input_path = sys.argv[1]
 
 # Open the file and turn it into one long string
 input_text = open_and_read_file(input_path)
 # print input_text
-# Get a Markov chain
-chains = make_chains(input_text)
-# for keys, values in chains.items():
-#     print keys, values
-
+# Get a Markov chain and pass in number of words for the n-gram
+chains = make_chains(input_text, 2)
 # Produce random text
 random_text = make_text(chains)
 
