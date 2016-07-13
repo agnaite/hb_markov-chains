@@ -1,5 +1,6 @@
-from random import choice
+from random import choice, randint
 import sys
+from string import punctuation
 
 
 def open_and_read_file(file_path):
@@ -87,6 +88,39 @@ def make_text(chains):
 
     return text
 
+def make_tweet(text):
+
+    #get a random length for the tweet
+    tweet_length = randint(20, 141)
+
+    #if the text length is less than the random length, make text length the tweet length
+    if len(text) < tweet_length:
+        tweet_length = len(text)
+
+    #strip the text and split it by white space
+    text_list = text.rstrip().split(" ")
+
+    tweet_list = []
+
+    #iterate over each word in the text and add it to the tweet list until the
+    #tweet reaches predefined length
+    for word in text_list:
+        tweet_string = " ".join(tweet_list)
+        if len(tweet_string) > tweet_length:
+            break
+        else:    
+            tweet_list.append(word)
+
+    #while the last character in the last word in tweet list is not a punctuation mark
+    #deletes the last word in the tweet list
+    while tweet_list[-1][-1] not in punctuation:
+        del tweet_list[-1]
+
+    #joins the tweet list to make a string of words to tweet
+    tweet = " ".join(tweet_list)
+
+    return tweet
+
 
 input_path = " ".join(sys.argv[1:])
 # Open the file and turn it into one long string
@@ -97,4 +131,4 @@ chains = make_chains(input_text, 2)
 # Produce random text
 random_text = make_text(chains)
 
-print random_text
+print make_tweet(random_text)
