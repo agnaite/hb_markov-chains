@@ -111,10 +111,23 @@ def make_tweet(text):
         else:    
             tweet_list.append(word)
 
+    #goes through the tweet string and appends punctuation marks
+    #to the punctuation list
+    punctuation_list = []
+    tweet_string = " ".join(tweet_list)
+    for char in tweet_string:
+        if char in punctuation:
+            punctuation_list.append(char)
+
+    #if no punctuation in tweet string then add period at the end
+    #else 
     #while the last character in the last word in tweet list is not a punctuation mark
     #deletes the last word in the tweet list
-    while tweet_list[-1][-1] not in punctuation:
-        del tweet_list[-1]
+    if len(punctuation_list) == 0:
+        tweet_list[-1] += '.'
+    else:
+        while tweet_list[-1][-1] not in punctuation:
+            del tweet_list[-1]
 
     #joins the tweet list to make a string of words to tweet
     tweet = " ".join(tweet_list)
