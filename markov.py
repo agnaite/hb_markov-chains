@@ -9,10 +9,20 @@ def open_and_read_file(file_path):
     the file's contents as one string of text.
     """
 
-    contents = open(file_path)
-    contents_read = contents.read()
+    the_file = file_path.split(" ")
+
+    if len(the_file) > 1:
+        file_1 = open(the_file[0])
+        file_2 = open(the_file[1])
+        contents_read = file_1.read() + file_2.read()
+        file_1.close()
+        file_2.close()
+    else:
+        file_1 = open(the_file[0])
+        contents_read = file_1.read()
+        file_1.close()
+
     text = contents_read.split()
-    contents.close()
 
     return text
 
@@ -76,7 +86,9 @@ def make_text(chains):
     return text
 
 
-input_path = sys.argv[1]
+input_path = " ".join(sys.argv[1:])
+
+#input_path = "green-eggs.txt"
 
 # Open the file and turn it into one long string
 input_text = open_and_read_file(input_path)
