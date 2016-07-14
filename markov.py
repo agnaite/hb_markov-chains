@@ -1,5 +1,4 @@
 from random import choice, randint
-import sys
 from string import punctuation
 
 
@@ -91,39 +90,39 @@ def make_text(chains):
 def make_tweet(text):
 
     #get a random length for the tweet
-    tweet_length = randint(20, 141)
+    tweet_length = 139
 
     #if the text length is less than the random length, make text length the tweet length
-    if len(text) < tweet_length:
-        tweet_length = len(text)
+    # if len(text) < tweet_length:
+    #     tweet_length = len(text)
 
     #strip the text and split it by white space
     text_list = text.rstrip().split(" ")
 
     tweet_list = []
-
+    tweet_string = ""
     #iterate over each word in the text and add it to the tweet list until the
     #tweet reaches predefined length
     for word in text_list:
-        tweet_string = " ".join(tweet_list)
-        if len(tweet_string) > tweet_length:
+        if len(tweet_string + word) > tweet_length:
             break
         else:    
             tweet_list.append(word)
+            tweet_string += word
 
-    #goes through the tweet string and appends punctuation marks
-    #to the punctuation list
-    punctuation_list = []
-    tweet_string = " ".join(tweet_list)
-    for char in tweet_string:
-        if char in punctuation:
-            punctuation_list.append(char)
+    #checks the tweet string to see if it has punctuation marks of any kind
+    has_punctuation = False
+    for char in punctuation:
+        if char in tweet_string:
+            has_punctuation = True
+            break
+
 
     #if no punctuation in tweet string then add period at the end
     #else 
     #while the last character in the last word in tweet list is not a punctuation mark
     #deletes the last word in the tweet list
-    if len(punctuation_list) == 0:
+    if not has_punctuation and len(tweet_string) < 140:
         tweet_list[-1] += '.'
     else:
         while tweet_list[-1][-1] not in punctuation:
@@ -135,13 +134,4 @@ def make_tweet(text):
     return tweet
 
 
-input_path = " ".join(sys.argv[1:])
-# Open the file and turn it into one long string
-input_text = open_and_read_file(input_path)
-# print input_text
-# Get a Markov chain and pass in number of words for the n-gram
-chains = make_chains(input_text, 2)
-# Produce random text
-random_text = make_text(chains)
 
-print make_tweet(random_text)
