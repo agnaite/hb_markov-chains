@@ -21,6 +21,6 @@ random_text = markov.make_text(chains)
 
 tweet_made = markov.make_tweet(random_text)
 
-# status = api.PostUpdate(tweet_made)
+status = api.PostUpdate(tweet_made)
 
 print tweet_made
